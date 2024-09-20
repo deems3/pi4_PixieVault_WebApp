@@ -12,8 +12,8 @@ using pi4_PixieVault_DemiBruls.Database;
 namespace pi4_PixieVault_DemiBruls.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240919175618_RemoveMaxLengthFromPrice")]
-    partial class RemoveMaxLengthFromPrice
+    [Migration("20240920081940_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

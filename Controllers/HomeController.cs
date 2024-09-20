@@ -27,10 +27,15 @@ namespace pi4_PixieVault_DemiBruls.Controllers
         {
             return View();
         }
-        public IActionResult Demi()
+        public IActionResult CollectionItem()
         {
             return View();
         }
+        public IActionResult Categories()
+        {
+            return View();
+        }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

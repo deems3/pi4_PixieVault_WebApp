@@ -14,7 +14,7 @@ namespace pi4_PixieVault_DemiBruls.Models
 
         // Define relations
         public int CategoryId { get; set; }
-        public Category Category { get; set; } = null!;
+        public Category? Category { get; set; } 
 
         [Required, MaxLength(255)]
         public required string Name { get; set; }
@@ -31,8 +31,8 @@ namespace pi4_PixieVault_DemiBruls.Models
         [Required]
         public required decimal Price { get; set; }
 
-        public int? CollectionItemPictureId { get; set; }
-        public CollectionItemPicture? CollectionItemPicture { get; set; } = null!;
+        //public int? CollectionItemPictureId { get; set; }
+        //public CollectionItemPicture? CollectionItemPicture { get; set; } = null!;
 
         public ICollection<CollectionItemCopy> CollectionItemCopies { get; } = [];
     }

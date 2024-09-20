@@ -16,7 +16,7 @@ namespace pi4_PixieVault_DemiBruls.Database
         public DbSet<CollectionItem> CollectionItems { get; set; }
         public DbSet<CollectionItemCopy> CollectionItemsCopies { get; set; }
         public DbSet<CollectionItemCopyValue> CollectionItemCopyValues { get; set; }
-        public DbSet<CollectionItemPicture> CollectionItemPictures { get; set; }
+        //public DbSet<CollectionItemPicture> CollectionItemPictures { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

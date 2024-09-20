@@ -12,8 +12,8 @@ using pi4_PixieVault_DemiBruls.Database;
 namespace pi4_PixieVault_DemiBruls.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240918184426_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240920082123_update-database")]
+    partial class updatedatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -99,7 +99,6 @@ namespace pi4_PixieVault_DemiBruls.Migrations
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<decimal>("Price")
-                        .HasMaxLength(255)
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
@@ -124,7 +123,7 @@ namespace pi4_PixieVault_DemiBruls.Migrations
                     b.Property<int>("CollectionItemId")
                         .HasColumnType("int");
 
-                    b.Property<int>("CollectionItemPictureId")
+                    b.Property<int?>("CollectionItemPictureId")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsForSale")
@@ -247,9 +246,7 @@ namespace pi4_PixieVault_DemiBruls.Migrations
 
                     b.HasOne("pi4_PixieVault_DemiBruls.Models.CollectionItemPicture", "CollectionItemPicture")
                         .WithMany()
-                        .HasForeignKey("CollectionItemPictureId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CollectionItemPictureId");
 
                     b.HasOne("pi4_PixieVault_DemiBruls.Models.User", "User")
                         .WithMany("CollectionItemCopies")

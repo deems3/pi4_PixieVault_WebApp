@@ -22,7 +22,8 @@ namespace pi4_PixieVault_DemiBruls.Controllers
         // GET: CollectionItems
         public async Task<IActionResult> Index()
         {
-            var databaseContext = _context.CollectionItems.Include(c => c.Category).Include(c => c.CollectionItemPicture);
+            var databaseContext = _context.CollectionItems.Include(c => c.Category);
+                //.Include(c => c.CollectionItemPicture);
             return View(await databaseContext.ToListAsync());
         }
 
@@ -36,7 +37,7 @@ namespace pi4_PixieVault_DemiBruls.Controllers
 
             var collectionItem = await _context.CollectionItems
                 .Include(c => c.Category)
-                .Include(c => c.CollectionItemPicture)
+                //.Include(c => c.CollectionItemPicture)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (collectionItem == null)
             {
@@ -49,7 +50,7 @@ namespace pi4_PixieVault_DemiBruls.Controllers
         // GET: CollectionItems/Create
         public IActionResult Create()
         {
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
+            ViewData["Category"] = new SelectList(_context.Categories, "Id", "Name");
             //ViewData["CollectionItemPictureId"] = new SelectList(_context.CollectionItemPictures, "Id", "FileName");
             return View();
         }
@@ -59,6 +60,7 @@ namespace pi4_PixieVault_DemiBruls.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+         // deze is goed !!! public async Task<IActionResult> Create([Bind("Id,CategoryId,Name,Description,Color,Material,Price,CollectionItemPictureId")] CollectionItem collectionItem)
         public async Task<IActionResult> Create([Bind("Id,CategoryId,Name,Description,Color,Material,Price")] CollectionItem collectionItem)
         {
             if (ModelState.IsValid)
@@ -95,6 +97,8 @@ namespace pi4_PixieVault_DemiBruls.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+
+        // deze is goed !!public async Task<IActionResult> Edit(int id, [Bind("Id,CategoryId,Name,Description,Color,Material,Price,CollectionItemPictureId")] CollectionItem collectionItem)
         public async Task<IActionResult> Edit(int id, [Bind("Id,CategoryId,Name,Description,Color,Material,Price")] CollectionItem collectionItem)
         {
             if (id != collectionItem.Id)
@@ -137,7 +141,7 @@ namespace pi4_PixieVault_DemiBruls.Controllers
 
             var collectionItem = await _context.CollectionItems
                 .Include(c => c.Category)
-                .Include(c => c.CollectionItemPicture)
+                //.Include(c => c.CollectionItemPicture)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (collectionItem == null)
             {

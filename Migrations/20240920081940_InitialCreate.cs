@@ -77,7 +77,7 @@ namespace pi4_PixieVault_DemiBruls.Migrations
                     Description = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     Color = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     Material = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", maxLength: 255, nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     CollectionItemPictureId = table.Column<int>(type: "int", nullable: true),
                     BrandId = table.Column<int>(type: "int", nullable: true)
                 },
@@ -111,7 +111,7 @@ namespace pi4_PixieVault_DemiBruls.Migrations
                     UserId = table.Column<int>(type: "int", nullable: false),
                     IsForSale = table.Column<bool>(type: "bit", nullable: false),
                     CollectionItemId = table.Column<int>(type: "int", nullable: false),
-                    CollectionItemPictureId = table.Column<int>(type: "int", nullable: false)
+                    CollectionItemPictureId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -120,8 +120,7 @@ namespace pi4_PixieVault_DemiBruls.Migrations
                         name: "FK_CollectionItemsCopies_CollectionItemPictures_CollectionItemPictureId",
                         column: x => x.CollectionItemPictureId,
                         principalTable: "CollectionItemPictures",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_CollectionItemsCopies_CollectionItems_CollectionItemId",
                         column: x => x.CollectionItemId,
