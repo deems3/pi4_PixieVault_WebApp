@@ -50,7 +50,7 @@ namespace pi4_PixieVault_DemiBruls.Controllers
         // GET: CollectionItems/Create
         public IActionResult Create()
         {
-            ViewData["Category"] = new SelectList(_context.Categories, "Id", "Name");
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
             //ViewData["CollectionItemPictureId"] = new SelectList(_context.CollectionItemPictures, "Id", "FileName");
             return View();
         }

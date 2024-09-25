@@ -34,6 +34,8 @@ namespace pi4_PixieVault_DemiBruls.Controllers
             }
 
             var category = await _context.Categories
+                // include means that you also need something from a related entity (relation fk) because a category has a list of collectionitems
+                .Include(m => m.CollectionItems)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (category == null)
             {

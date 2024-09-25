@@ -13,7 +13,7 @@ namespace pi4_PixieVault_DemiBruls.Models
         public int Id { get; set; }
 
         // Define relations
-        public int CategoryId { get; set; }
+        public int? CategoryId { get; set; }
         public Category? Category { get; set; } 
 
         [Required, MaxLength(255)]

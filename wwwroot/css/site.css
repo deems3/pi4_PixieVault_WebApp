@@ -8,7 +8,6 @@ html {
 @media (min-width: 768px) {
   html {
     font-size: 16px;
-    background-color: deeppink;
   }
 }
 
@@ -19,10 +18,8 @@ html {
 html {
   position: relative;
   min-height: 100%;
-  background-color: deeppink;
 }
 
 body {
   margin-bottom: 60px;
-  background-color: deeppink;
 }

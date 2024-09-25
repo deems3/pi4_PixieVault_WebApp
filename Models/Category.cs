@@ -15,6 +15,6 @@ namespace pi4_PixieVault_DemiBruls.Models
         [Required, MaxLength(255)]
         public required string Name { get; set; }
 
-        ICollection<CollectionItem> CollectionItems { get; } = [];
+        public ICollection<CollectionItem> CollectionItems { get; } = [];
     }
 }
