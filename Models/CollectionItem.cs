@@ -34,6 +34,6 @@ namespace pi4_PixieVault_DemiBruls.Models
         //public int? CollectionItemPictureId { get; set; }
         //public CollectionItemPicture? CollectionItemPicture { get; set; } = null!;
 
-        public ICollection<CollectionItemCopy> CollectionItemCopies { get; } = [];
+        public ICollection<UserItem> UserItems { get; } = [];
     }
 }

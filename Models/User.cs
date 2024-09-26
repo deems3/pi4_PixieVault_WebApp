@@ -22,6 +22,6 @@ namespace pi4_PixieVault_DemiBruls.Models
         public required string Name { get; set; }
 
         // ICollection indicates that a User can have more than one CollectionItem
-        public ICollection<CollectionItemCopy> CollectionItemCopies { get; } = [];
+        public ICollection<UserItem> UserItems { get; } = [];
     }
 }
