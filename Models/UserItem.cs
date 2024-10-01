@@ -15,17 +15,17 @@ namespace pi4_PixieVault_DemiBruls.Models
         public int Id { get; set; }
 
         public int UserId { get; set; }
-        public User User { get; set; } = null!;
+        public User? User { get; set; }
 
         public int CollectionItemId { get; set; }
-        public CollectionItem CollectionItem { get; set; } = null!;
+        public required CollectionItem? CollectionItem { get; set; }
 
-        public int? CollectionItemPictureId { get; set; }
-        public Picture? CollectionItemPicture { get; set; } = null!;
+        //public int? CollectionItemPictureId { get; set; }
+        //public Picture? CollectionItemPicture { get; set; } = null!;
 
         public bool IsForSale { get; set; }
         public DateTime ReleaseDate { get; set; }
-        public string State { get; set; }
+        public required string State { get; set; }
 
         [Column(TypeName="decimal(18,2)")]
         public decimal ForSalePrice { get; set; }

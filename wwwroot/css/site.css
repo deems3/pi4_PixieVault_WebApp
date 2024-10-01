@@ -2,7 +2,7 @@
 
 /* Variables defined in :root are globally accessible in the CSS */
 :root {
-    --navbar-height: 70px;
+    --navbar-height: 100px;
 }
 
 html {
@@ -107,4 +107,12 @@ nav {
     .hero-content p {
         font-size: 1.5rem;
         margin-top: 10px;
+    }
+
+    .padding0{
+        padding: 0px;
+    }
+
+    .btn-views{
+        color: black;
     }
