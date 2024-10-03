@@ -53,7 +53,7 @@ namespace pi4_PixieVault_DemiBruls.Controllers
         {
             ViewData["CollectionItemId"] = new SelectList(_context.CollectionItems, "Id", "Name");
             //ViewData["CollectionItemPictureId"] = new SelectList(_context.Set<Picture>(), "Id", "FileName");
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Name");
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Email");
             return View();
         }
 

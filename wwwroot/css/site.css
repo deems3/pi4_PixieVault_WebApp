@@ -25,8 +25,16 @@ html {
 }
 
 body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100vh;
     font-family: "Poppins", sans-serif;
     --bs-dark-rgb: 0,0,0;
+}
+
+main {
+    flex: 1;
 }
 
 nav {
@@ -116,3 +124,10 @@ nav {
     .btn-views{
         color: black;
     }
+
+    .btn-crud{
+        color: #fff;
+        background-color: black;       
+    }
+
+    

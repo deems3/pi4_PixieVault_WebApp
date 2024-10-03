@@ -1,4 +1,7 @@
 using pi4_PixieVault_DemiBruls.Database;
+using pi4_PixieVault_DemiBruls.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace pi4_PixieVault_DemiBruls
 {
@@ -12,6 +15,9 @@ namespace pi4_PixieVault_DemiBruls
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddDbContext<DatabaseContext>();
+            builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
+                .AddEntityFrameworkStores<DatabaseContext>();
+            builder.Services.AddRazorPages();
 
             var app = builder.Build();
 
@@ -30,9 +36,18 @@ namespace pi4_PixieVault_DemiBruls
 
             app.UseAuthorization();
 
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Login}/{id?}");
+                endpoints.MapRazorPages();
+            });
+
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Home}/{action=Index}/{id?}")
+;
 
             app.Run();
         }
