@@ -1,0 +1,6 @@
+@pi4_API_DemiBruls_HostAddress = http://localhost:5278
+
+GET {{pi4_API_DemiBruls_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
