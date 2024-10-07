@@ -1,29 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using pi4_PixieVault_DemiBruls.Database;
 using pi4_PixieVault_DemiBruls.Models;
+using System.Security.Claims;
 
 namespace pi4_PixieVault_DemiBruls.Controllers
 {
+    [Authorize]
     public class UserItemsController : Controller
     {
         private readonly DatabaseContext _context;
+        private readonly UserManager<User> _userManager;
 
-        public UserItemsController(DatabaseContext context)
+        public UserItemsController(DatabaseContext context, UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: UserItems
         public async Task<IActionResult> Index()
         {
-             //DEZE IS GOED var databaseContext = _context.UserItems.Include(u => u.CollectionItem).Include(u => u.CollectionItemPicture).Include(u => u.User);
+            //DEZE IS GOED var databaseContext = _context.UserItems.Include(u => u.CollectionItem).Include(u => u.CollectionItemPicture).Include(u => u.User);
+            var user = await _userManager.GetUserAsync(HttpContext.User);
             var databaseContext = _context.UserItems.Include(u => u.CollectionItem).Include(u => u.User);
+            ViewData["currentUserId"] = user!.Id;
             return View(await databaseContext.ToListAsync());
         }
 
@@ -85,11 +89,21 @@ namespace pi4_PixieVault_DemiBruls.Controllers
                 return NotFound();
             }
 
-            var userItem = await _context.UserItems.FindAsync(id);
+            // Fetch current user
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            // Also fetch the user that owns the UserItem
+            var userItem = await _context.UserItems.Include(userItem => userItem.User).FirstOrDefaultAsync(ui => ui.Id == id);
             if (userItem == null)
             {
                 return NotFound();
             }
+
+            // If the user.Id is not the same as the UserId from the UserItem, redirect the user back to the index because the item is not theirs
+            if (user!.Id != userItem.User!.Id)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
             ViewData["CollectionItemId"] = new SelectList(_context.CollectionItems, "Id", "Color", userItem.CollectionItemId);
             //ViewData["CollectionItemPictureId"] = new SelectList(_context.Set<Picture>(), "Id", "FileName", userItem.CollectionItemPictureId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Name", userItem.UserId);

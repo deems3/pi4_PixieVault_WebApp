@@ -55,6 +55,9 @@
     </dl>
 </div>
 <div>
-    <a class="btn btn-crud" asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    @if((string)ViewData["currentUserId"]! == (string)Model.User!.Id)
+    {
+        <a class="btn btn-crud" asp-action="Edit" asp-route-id="@Model?.Id">Edit</a>        
+    }
     <a class="btn btn-crud" asp-action="Index">Back to List</a>
 </div>
