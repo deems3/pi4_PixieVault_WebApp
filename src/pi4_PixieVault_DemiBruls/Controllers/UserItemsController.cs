@@ -56,7 +56,7 @@ namespace pi4_PixieVault_DemiBruls.Controllers
         public IActionResult Create()
         {
             ViewData["CollectionItemId"] = new SelectList(_context.CollectionItems, "Id", "Name");
-            //ViewData["CollectionItemPictureId"] = new SelectList(_context.Set<Picture>(), "Id", "FileName");
+            ViewData["PictureId"] = new SelectList(_context.Set<Picture>(), "Id", "FileName");
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Email");
             return View();
         }
@@ -66,8 +66,7 @@ namespace pi4_PixieVault_DemiBruls.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //DEZE IS GOED public async Task<IActionResult> Create([Bind("Id,UserId,CollectionItemId,CollectionItemPictureId,IsForSale,ReleaseDate,State,ForSalePrice")] UserItem userItem)
-        public async Task<IActionResult> Create([Bind("Id,UserId,CollectionItemId,IsForSale,ReleaseDate,State,ForSalePrice")] UserItem userItem)
+        public async Task<IActionResult> Create([Bind("Id,UserId,CollectionItemId,PictureId,IsForSale,ReleaseDate,State,ForSalePrice")] UserItem userItem)
         {
             if (ModelState.IsValid)
             {
@@ -76,7 +75,7 @@ namespace pi4_PixieVault_DemiBruls.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CollectionItemId"] = new SelectList(_context.CollectionItems, "Id", "Name", userItem.CollectionItemId);
-            //ViewData["CollectionItemPictureId"] = new SelectList(_context.Set<Picture>(), "Id", "FileName", userItem.CollectionItemPictureId);
+            ViewData["PictureId"] = new SelectList(_context.Set<Picture>(), "Id", "FileName", userItem.PictureId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Name", userItem.UserId);
             return View(userItem);
         }
@@ -105,7 +104,7 @@ namespace pi4_PixieVault_DemiBruls.Controllers
             }
 
             ViewData["CollectionItemId"] = new SelectList(_context.CollectionItems, "Id", "Color", userItem.CollectionItemId);
-            //ViewData["CollectionItemPictureId"] = new SelectList(_context.Set<Picture>(), "Id", "FileName", userItem.CollectionItemPictureId);
+            ViewData["PictureId"] = new SelectList(_context.Set<Picture>(), "Id", "FileName", userItem.PictureId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Name", userItem.UserId);
             return View(userItem);
         }
@@ -115,8 +114,7 @@ namespace pi4_PixieVault_DemiBruls.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //DEZE IS GOED public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,CollectionItemId,CollectionItemPictureId,IsForSale,ReleaseDate,State,ForSalePrice")] UserItem userItem)
-        public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,CollectionItemId,IsForSale,ReleaseDate,State,ForSalePrice")] UserItem userItem)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,CollectionItemId,PictureId,IsForSale,ReleaseDate,State,ForSalePrice")] UserItem userItem)
         {
             if (id != userItem.Id)
             {
@@ -144,7 +142,7 @@ namespace pi4_PixieVault_DemiBruls.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CollectionItemId"] = new SelectList(_context.CollectionItems, "Id", "Color", userItem.CollectionItemId);
-            //ViewData["CollectionItemPictureId"] = new SelectList(_context.Set<Picture>(), "Id", "FileName", userItem.CollectionItemPictureId);
+            ViewData["PictureId"] = new SelectList(_context.Set<Picture>(), "Id", "FileName", userItem.PictureId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Name", userItem.UserId);
             return View(userItem);
         }
@@ -159,7 +157,7 @@ namespace pi4_PixieVault_DemiBruls.Controllers
 
             var userItem = await _context.UserItems
                 .Include(u => u.CollectionItem)
-                //.Include(u => u.CollectionItemPicture)
+                .Include(u => u.Picture)
                 .Include(u => u.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (userItem == null)

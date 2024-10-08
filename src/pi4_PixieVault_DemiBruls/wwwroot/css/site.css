@@ -130,4 +130,8 @@ nav {
         background-color: black;       
     }
 
+    .btn-crud:hover{
+        color: white;
+        border-color: #fff;
+    }
     
