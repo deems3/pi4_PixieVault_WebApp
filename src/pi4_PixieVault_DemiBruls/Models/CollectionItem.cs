@@ -32,7 +32,7 @@ namespace pi4_PixieVault_DemiBruls.Models
         public required decimal Price { get; set; }
 
         public int? PictureId { get; set; }
-        public Picture? Picture { get; set; } = null!;
+        public Picture? Picture { get; set; }
 
         public ICollection<UserItem> UserItems { get; } = [];
     }
