@@ -26,7 +26,7 @@ namespace pi4_PixieVault_DemiBruls.Controllers
         {
             //DEZE IS GOED var databaseContext = _context.UserItems.Include(u => u.CollectionItem).Include(u => u.CollectionItemPicture).Include(u => u.User);
             var user = await _userManager.GetUserAsync(HttpContext.User);
-            var databaseContext = _context.UserItems.Include(u => u.CollectionItem).Include(u => u.User);
+            var databaseContext = _context.UserItems.Include(u => u.CollectionItem).Include(u => u.User).Include(u => u.Picture);
             ViewData["currentUserId"] = user!.Id;
             return View(await databaseContext.ToListAsync());
         }
@@ -41,7 +41,7 @@ namespace pi4_PixieVault_DemiBruls.Controllers
 
             var userItem = await _context.UserItems
                 .Include(u => u.CollectionItem)
-                //.Include(u => u.CollectionItemPicture)
+                .Include(u => u.Picture)
                 .Include(u => u.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (userItem == null)
@@ -55,8 +55,8 @@ namespace pi4_PixieVault_DemiBruls.Controllers
         // GET: UserItems/Create
         public IActionResult Create()
         {
+            // TODO: collectionid gives back collectioncolor.
             ViewData["CollectionItemId"] = new SelectList(_context.CollectionItems, "Id", "Name");
-            ViewData["PictureId"] = new SelectList(_context.Set<Picture>(), "Id", "FileName");
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Email");
             return View();
         }
@@ -66,16 +66,39 @@ namespace pi4_PixieVault_DemiBruls.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,UserId,CollectionItemId,PictureId,IsForSale,ReleaseDate,State,ForSalePrice")] UserItem userItem)
+        public async Task<IActionResult> Create([Bind("Id,UserId,CollectionItemId,IsForSale,ReleaseDate,State,ForSalePrice")] UserItem userItem, IFormFile? file)
         {
+            if (file == null || file.Length == 0)
+            {
+                ModelState.AddModelError("FileName", "De File is verplicht.");
+            }
+
             if (ModelState.IsValid)
             {
+                if (file != null)
+                {
+                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                    var uploadsDirName = "uploads";
+                    var filePath = Path.Combine($"wwwroot/{uploadsDirName}", fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(stream);
+                    }
+
+                    // Sla het pad van het bestand op in het productmodel
+                    var picture = new Picture
+                    {
+                        FileName = fileName,
+                        FilePath = $"/{uploadsDirName}/{fileName}"
+                    };
+                    userItem.Picture = picture;
+                }
                 _context.Add(userItem);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CollectionItemId"] = new SelectList(_context.CollectionItems, "Id", "Name", userItem.CollectionItemId);
-            ViewData["PictureId"] = new SelectList(_context.Set<Picture>(), "Id", "FileName", userItem.PictureId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Name", userItem.UserId);
             return View(userItem);
         }
@@ -91,7 +114,7 @@ namespace pi4_PixieVault_DemiBruls.Controllers
             // Fetch current user
             var user = await _userManager.GetUserAsync(HttpContext.User);
             // Also fetch the user that owns the UserItem
-            var userItem = await _context.UserItems.Include(userItem => userItem.User).FirstOrDefaultAsync(ui => ui.Id == id);
+            var userItem = await _context.UserItems.Include(userItem => userItem.User).Include(u => u.Picture).FirstOrDefaultAsync(ui => ui.Id == id);
             if (userItem == null)
             {
                 return NotFound();
@@ -104,8 +127,7 @@ namespace pi4_PixieVault_DemiBruls.Controllers
             }
 
             ViewData["CollectionItemId"] = new SelectList(_context.CollectionItems, "Id", "Color", userItem.CollectionItemId);
-            ViewData["PictureId"] = new SelectList(_context.Set<Picture>(), "Id", "FileName", userItem.PictureId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Name", userItem.UserId);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Email", userItem.UserId);
             return View(userItem);
         }
 
@@ -114,7 +136,7 @@ namespace pi4_PixieVault_DemiBruls.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,CollectionItemId,PictureId,IsForSale,ReleaseDate,State,ForSalePrice")] UserItem userItem)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,CollectionItemId,IsForSale,ReleaseDate,State,ForSalePrice")] UserItem userItem, IFormFile? file)
         {
             if (id != userItem.Id)
             {
@@ -125,6 +147,25 @@ namespace pi4_PixieVault_DemiBruls.Controllers
             {
                 try
                 {
+                    if (file != null)
+                    {
+                        var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                        var uploadsDirName = "uploads";
+                        var filePath = Path.Combine($"wwwroot/{uploadsDirName}", fileName);
+
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await file.CopyToAsync(stream);
+                        }
+
+                        // Sla het pad van het bestand op in het productmodel
+                        var picture = new Picture
+                        {
+                            FileName = fileName,
+                            FilePath = $"/{uploadsDirName}/{fileName}"
+                        };
+                        userItem.Picture = picture;
+                    }
                     _context.Update(userItem);
                     await _context.SaveChangesAsync();
                 }
@@ -142,7 +183,6 @@ namespace pi4_PixieVault_DemiBruls.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CollectionItemId"] = new SelectList(_context.CollectionItems, "Id", "Color", userItem.CollectionItemId);
-            ViewData["PictureId"] = new SelectList(_context.Set<Picture>(), "Id", "FileName", userItem.PictureId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Name", userItem.UserId);
             return View(userItem);
         }

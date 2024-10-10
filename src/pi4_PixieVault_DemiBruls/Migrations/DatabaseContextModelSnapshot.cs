@@ -244,7 +244,7 @@ namespace pi4_PixieVault_DemiBruls.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("pi4_PixieVault_DemiBruls.Models.CollectionItem", b =>
@@ -290,7 +290,7 @@ namespace pi4_PixieVault_DemiBruls.Migrations
 
                     b.HasIndex("PictureId");
 
-                    b.ToTable("CollectionItems");
+                    b.ToTable("CollectionItems", (string)null);
                 });
 
             modelBuilder.Entity("pi4_PixieVault_DemiBruls.Models.Picture", b =>
@@ -311,7 +311,7 @@ namespace pi4_PixieVault_DemiBruls.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Pictures");
+                    b.ToTable("Pictures", (string)null);
                 });
 
             modelBuilder.Entity("pi4_PixieVault_DemiBruls.Models.UserItem", b =>
@@ -352,7 +352,7 @@ namespace pi4_PixieVault_DemiBruls.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserItems");
+                    b.ToTable("UserItems", (string)null);
                 });
 
             modelBuilder.Entity("pi4_PixieVault_DemiBruls.Models.User", b =>

@@ -21,7 +21,7 @@ namespace pi4_PixieVault_DemiBruls.Models
         public required CollectionItem? CollectionItem { get; set; }
 
         public int? PictureId { get; set; }
-        public Picture? Picture { get; set; } = null!;
+        public Picture? Picture { get; set; }
 
         public bool IsForSale { get; set; }
         public DateTime ReleaseDate { get; set; }

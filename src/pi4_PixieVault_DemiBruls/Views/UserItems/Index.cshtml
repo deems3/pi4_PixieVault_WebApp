@@ -18,9 +18,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.CollectionItem)
             </th>
-@*             <th>
-                @Html.DisplayNameFor(model => model.CollectionItemPicture)
-            </th> *@
+             <th>
+                @Html.DisplayNameFor(model => model.Picture)
+            </th> 
             <th>
                 @Html.DisplayNameFor(model => model.IsForSale)
             </th>
@@ -45,8 +45,11 @@
             <td>
                 @Html.DisplayFor(modelItem => item.CollectionItem.Name)
             </td>
-             <td>
-                @Html.DisplayFor(modelItem => item.Picture.FileName)
+            <td>
+                @if(item.Picture is not null)
+                {
+                <img src="@item.Picture.FilePath" width="100" />
+                }
             </td> 
             <td>
                 @Html.DisplayFor(modelItem => item.IsForSale)

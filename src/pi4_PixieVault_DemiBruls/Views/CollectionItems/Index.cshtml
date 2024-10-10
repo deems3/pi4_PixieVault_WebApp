@@ -57,9 +57,12 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Price)
             </td>
-@*              <td>
-                 @Html.DisplayFor(modelItem => item.CollectionItemPicture.FileName)
-             </td> *@
+            <td>
+                @if(item.Picture is not null)
+                {
+                    <img src="@item.Picture.FilePath" width="100" />
+                }
+            </td> 
             <td>
                 <a class="btn btn-crud" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a class="btn btn-crud" asp-action="Details" asp-route-id="@item.Id">Details</a> |
