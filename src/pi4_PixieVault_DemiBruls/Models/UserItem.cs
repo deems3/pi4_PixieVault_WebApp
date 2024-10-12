@@ -29,5 +29,8 @@ namespace pi4_PixieVault_DemiBruls.Models
 
         [Column(TypeName="decimal(18,2)")]
         public decimal ForSalePrice { get; set; }
+
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal Value { get; set; }
     }
 }

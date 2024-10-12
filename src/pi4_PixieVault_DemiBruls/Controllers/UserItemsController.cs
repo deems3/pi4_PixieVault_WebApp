@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Packaging;
 using pi4_PixieVault_DemiBruls.Database;
 using pi4_PixieVault_DemiBruls.Models;
 using System.Security.Claims;
@@ -66,7 +67,7 @@ namespace pi4_PixieVault_DemiBruls.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,UserId,CollectionItemId,IsForSale,ReleaseDate,State,ForSalePrice")] UserItem userItem, IFormFile? file)
+        public async Task<IActionResult> Create([Bind("Id,UserId,CollectionItemId,IsForSale,ReleaseDate,State,ForSalePrice,Value")] UserItem userItem, IFormFile? file)
         {
             if (file == null || file.Length == 0)
             {
@@ -136,7 +137,7 @@ namespace pi4_PixieVault_DemiBruls.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,CollectionItemId,IsForSale,ReleaseDate,State,ForSalePrice")] UserItem userItem, IFormFile? file)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,CollectionItemId,IsForSale,ReleaseDate,State,ForSalePrice,Value")] UserItem userItem, IFormFile? file)
         {
             if (id != userItem.Id)
             {
@@ -226,6 +227,18 @@ namespace pi4_PixieVault_DemiBruls.Controllers
         private bool UserItemExists(int id)
         {
             return _context.UserItems.Any(e => e.Id == id);
+        }
+
+        public async Task<IActionResult> Value()
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var userItems = _context.UserItems.Include(ui => ui.User).Include(ui => ui.CollectionItem).Where(ui => ui.User!.Id == user!.Id);
+            var itemValues = new Dictionary<string, decimal>();
+            itemValues.AddRange(
+                userItems.Select(ui => new KeyValuePair<string, decimal>(ui.CollectionItem!.Name, ui.Value))
+                );
+            var userItemsValue = await userItems.SumAsync(ui => ui.Value);
+            return View(new ValueViewModel { Email = user!.Email!, itemValues = itemValues, TotalValue = userItemsValue });
         }
     }
 }

@@ -1,0 +1,37 @@
+﻿@model ValueViewModel
+
+@{
+    ViewData["Title"] = "Value";
+}
+
+
+<div class="container">
+    <h1>Collection value</h1>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt class="col-sm-2">
+            Items in collection:
+        </dt>
+        <dd class="col-sm-10">
+            @foreach(var item in Model.itemValues)
+            {
+                <p>@item.Key: € @item.Value</p>
+            }
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TotalValue)
+        </dt>
+        <dd class="col-sm-10">
+            € @Model.TotalValue
+        </dd>
+    </dl>
+    <div>
+        <a class="btn btn-crud" asp-action="Index">Back to List</a>
+    </div>
+</div>
