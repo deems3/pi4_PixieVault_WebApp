@@ -144,6 +144,8 @@ namespace pi4_PixieVault_DemiBruls.Controllers
                 return NotFound();
             }
 
+            var existingEntry = _context.UserItems.AsNoTracking().Include(ci => ci.Picture).FirstOrDefault(ci => ci.Id == userItem.Id);
+
             if (ModelState.IsValid)
             {
                 try
@@ -167,6 +169,14 @@ namespace pi4_PixieVault_DemiBruls.Controllers
                         };
                         userItem.Picture = picture;
                     }
+                    else
+                    {
+                        if (existingEntry != null && existingEntry.Picture is not null)
+                        {
+                            userItem.Picture = existingEntry.Picture;
+                        }
+                    }
+
                     _context.Update(userItem);
                     await _context.SaveChangesAsync();
                 }

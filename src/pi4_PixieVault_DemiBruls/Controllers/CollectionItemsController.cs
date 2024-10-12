@@ -133,6 +133,8 @@ namespace pi4_PixieVault_DemiBruls.Controllers
                 return NotFound();
             }
 
+            var existingEntry = _context.CollectionItems.AsNoTracking().Include(ci => ci.Picture).FirstOrDefault(ci => ci.Id == collectionItem.Id);
+
             if (ModelState.IsValid)
             {
 
@@ -156,6 +158,13 @@ namespace pi4_PixieVault_DemiBruls.Controllers
                             FilePath = $"/{uploadsDirName}/{fileName}"
                         };
                         collectionItem.Picture = picture;
+                    }
+                    else
+                    {
+                        if (existingEntry != null && existingEntry.Picture is not null)
+                        {
+                            collectionItem.Picture = existingEntry.Picture;
+                        }
                     }
 
                     _context.Update(collectionItem);
